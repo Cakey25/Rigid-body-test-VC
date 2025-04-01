@@ -50,7 +50,6 @@ class Game_Engine:
                 pg.Vector2(0.125, -0.25)
         ])
 
-        #self.rigid1 = Rigid_body(self, self.shape1, pg.Vector2(-1, -0.25), pg.Vector2(0.5, 0), 0, 5, 2, 0.5, False)
         self.rigid1 = Rigid_body(self, self.shape2, pg.Vector2(1, 0), pg.Vector2(0, 0), 0, 4, 2, 0.5, True)
 
         self.player = Player(self, pg.Vector2(0, 0))
@@ -79,7 +78,6 @@ class Game_Engine:
     def update(self):
 
         self.rigid1.update()
-        #self.rigid2.update()
         self.player.update()
 
         # Doing collisions between 2 shapes
@@ -114,9 +112,7 @@ class Game_Engine:
         self.window.fill((20, 40, 60))
 
         self.player.render()
-
         self.rigid1.render()
-        #self.rigid2.render()
 
         pg.display.flip()
 
