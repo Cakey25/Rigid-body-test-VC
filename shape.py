@@ -26,7 +26,9 @@ class Shape_Convex:
 
         self.colour = (240, 0, 0)
 
-    def update(self):
+    def update(self, position, rotation):
+        self.pos = position
+        self.rotation = rotation
 
         self.rotation_matrix = self.calculate_rot_matrix()
         self.calculate_vertices()

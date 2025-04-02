@@ -34,10 +34,8 @@ class Rigid_body:
         # Velocity
         self.d_pos = self.vel * self.app.dt
         self.pos += self.d_pos
-
-        self.shape.rotation = self.rotation
-        self.shape.pos = self.pos
-        self.shape.update()
+        # Update shape
+        self.shape.update(self.pos, self.rotation)
 
     def apply_force_local(self, force, relative_pos):
         pos = relative_pos.rotate_rad(self.rotation)
