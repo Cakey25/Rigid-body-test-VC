@@ -4,6 +4,7 @@ import pygame as pg
 import sys
 import numpy
 import time
+import math
 # Modules
 from config import WINDOW_SIZE, FPS_TARGET, PIXEL_PER_METER
 from rigid_body import Rigid_body, rigid_body_collision
@@ -12,6 +13,7 @@ from shape import Shape_Convex
 from collision import seperating_axis, bounding_box, polygon_polygon 
 from collision import find_collision_points, find_normals, calc_midpoint
 from player import Player
+from rendering import Camera2D, world_to_camera
 
 
 class Game_Engine:
@@ -26,6 +28,10 @@ class Game_Engine:
         self.shape_scene()
 
     def shape_scene(self):
+
+        self.camera = Camera2D(self)
+        self.camera.update(pg.Vector2(0, 0), 0)
+        self.camera.scale = 0.5
 
         # Convension that point orders will always go anticlockwise
         self.shape1 = Shape_Convex(
@@ -51,7 +57,6 @@ class Game_Engine:
         ])
 
         self.rigid1 = Rigid_body(self, self.shape2, pg.Vector2(1, 0), pg.Vector2(0, 0), 0, 4, 2, 0.5, True)
-
         self.player = Player(self, pg.Vector2(0, 0))
 
     def events(self):
@@ -79,6 +84,8 @@ class Game_Engine:
 
         self.rigid1.update()
         self.player.update()
+
+        self.camera.update(self.player.rigid.pos, self.player.rigid.rotation - math.pi / 2)
 
         # Doing collisions between 2 shapes
         if bounding_box(self.rigid1.shape, self.player.shape): #0.01
@@ -111,10 +118,34 @@ class Game_Engine:
     def render(self):
         self.window.fill((20, 40, 60))
 
+        ##### Bad line code to show how player is moving with camera
+        pos = self.player.rigid.pos
+        x_trunc = math.floor(pos.x)
+        y_trunc = math.floor(pos.y)
+        x_min = x_trunc - 8
+        x_max = x_trunc + 8
+        y_min = y_trunc - 8
+        y_max = y_trunc + 8
+        step = 1
+        colour = (10, 10, 10)
+
+        for x in range(x_min, x_max, step):
+            p1 = world_to_camera(pg.Vector2(x, y_min), self.camera)
+            p2 = world_to_camera(pg.Vector2(x, y_max), self.camera)
+            pg.draw.line(self.window, colour, p1, p2)
+
+        for y in range(y_min, y_max, step):
+            p1 = world_to_camera(pg.Vector2(x_min, y), self.camera)
+            p2 = world_to_camera(pg.Vector2(x_max, y), self.camera)
+            pg.draw.line(self.window, colour, p1, p2)
+        #### End of bad code
+
         self.player.render()
         self.rigid1.render()
 
         pg.display.flip()
+
+        
 
 
 if __name__ == '__main__':

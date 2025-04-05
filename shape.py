@@ -57,11 +57,11 @@ class Shape_Convex:
         ]
 
     def render(self):
-        offset_positions = [world_to_camera(point) for point in self.vertices]
+        offset_positions = [world_to_camera(point, self.app.camera) for point in self.vertices]
         pg.draw.lines(self.app.window, self.colour, True, offset_positions)
 
         #self.bounding_box.render()
-        pg.draw.circle(self.app.window, self.colour, world_to_camera(self.pos), 2)
+        pg.draw.circle(self.app.window, self.colour, world_to_camera(self.pos, self.app.camera), 2)
 
 class Bounding_Box:
     def __init__(self, shape):
@@ -82,5 +82,5 @@ class Bounding_Box:
             pg.Vector2(self.left, self.bottom)
         ]
         # Render vertices
-        offset_positions = [world_to_camera(point) for point in self.vertices]
+        offset_positions = [world_to_camera(point, self.app.camera) for point in self.vertices]
         pg.draw.lines(self.app.window, self.colour, True, offset_positions)
