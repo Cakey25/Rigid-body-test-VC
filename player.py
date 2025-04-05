@@ -26,7 +26,7 @@ class Player:
             shape=self.shape,
             pos=pos,
             vel=pg.Vector2(0, 0),
-            rot=math.pi / 2,
+            rot=0, # math.pi / 2,
             angular_vel=0,
             mass=2,
             inertia=2,
